@@ -1,0 +1,24 @@
+[project]
+name = "ad-optimization"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.3",
+    "mip>=1.15.0",
+    "numpy>=2.3.1",
+    "polars>=1.31.0",
+    "pydantic>=2.11.7",
+    "pyscipopt>=5.5.0",
+    "scikit-learn>=1.7.0",
+    "scipy>=1.16.0",
+    "seaborn>=0.13.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
