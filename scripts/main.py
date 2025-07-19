@@ -7,6 +7,8 @@ from src.consts import ROOT
 from src.dataclass import OptimizeInputData
 from src.estimate.reach_estimator import ProgramUniqueReachEstimator
 from src.optimize.greedy_optimizer import GreedyOptimizer
+from src.optimize.gurobi_model import GurobiModel
+from src.optimize.python_mip_model import PythonMipModel
 from src.optimize.scip_mip_model import ScipMipModel
 
 
@@ -57,14 +59,15 @@ def prepare_reach_estimator(
 
 
 def create_optimizer(
-    input_data: OptimizeInputData, solver_type: Literal["greedy", "scip_mip"] = "greedy"
+    input_data: OptimizeInputData,
+    solver_type: Literal["greedy", "scip_mip", "python_mip", "gurobi"] = "greedy",
 ):
     """
     指定されたソルバータイプに応じて最適化器を作成する
 
     Args:
         input_data: 最適化問題の入力データ
-        solver_type: ソルバーの種類 ("greedy" または "scip_mip")
+        solver_type: ソルバーの種類 ("greedy", "scip_mip", "python_mip", または "gurobi")
 
     Returns:
         最適化器のインスタンス
@@ -73,11 +76,15 @@ def create_optimizer(
         return GreedyOptimizer(input_data)
     elif solver_type == "scip_mip":
         return ScipMipModel(input_data)
+    elif solver_type == "python_mip":
+        return PythonMipModel(input_data)
+    elif solver_type == "gurobi":
+        return GurobiModel(input_data)
     else:
         raise ValueError(f"未対応のソルバータイプ: {solver_type}")
 
 
-def main(solver_type: Literal["greedy", "scip_mip"] = "greedy"):
+def main(solver_type: Literal["greedy", "scip_mip", "python_mip", "gurobi"] = "greedy"):
     """
     最適化の実行例
 
@@ -142,9 +149,6 @@ if __name__ == "__main__":
 
     # 単一ソルバーの実行例（デフォルトは貪欲法）
     print("=== 単一ソルバー実行 ===")
-    output_data = main("scip_mip")  # "greedy" または "scip_mip" を指定
-
-    # 複数ソルバーの比較（オプション）
-    # compare_solvers()
+    output_data = main("gurobi")  # "greedy", "scip_mip", "python_mip", "gurobi" を指定
 
     print("\n=== 実行完了 ===")
